@@ -1,28 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:module2/question.dart';
+import './answer.dart';
 
 void main() {
   runApp(new FirstApp());
 }
 
 class FirstApp extends StatefulWidget {
-@override
-State<StatefulWidget> createState(){
- return FirstAppState();
+  @override
+  State<StatefulWidget> createState() {
+    return _FirstAppState();
+  }
 }
-}
-class FirstAppState extends State<FirstApp>{
-  var counter=0;
-  void answerPicked() {
-    print("answer choosen");
-   setState((){
-     counter++;
-   });
-    print(counter);
+
+class _FirstAppState extends State<FirstApp> {
+  var counter = 0;
+  void _answerPicked() {
+    setState(() {
+      counter++;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List <String> questions=["What is you favourite colour","What is you fav animal"];
+    var questions = [
+      {
+        "question":"What is you favourite colour",
+      "answer":[
+       "blue","green","black","red"
+      ]},
+      {
+        "question":"What is you favourite animal",
+      "answer":[
+       "lion","tiger","whale"
+      ]},
+      {
+        "question":"What is you favourite weather",
+      "answer":[
+       "humid","sunny","rainy"
+      ]},
+      {
+        "question":"What is you favourite programming lang",
+      "answer":[
+       "c++","dart","java"
+      ]},
+      
+    ];
+    
     return MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
@@ -30,19 +54,12 @@ class FirstAppState extends State<FirstApp>{
         ),
         body: new Column(
           children: <Widget>[
-            new Text(questions[counter]),
-            new RaisedButton(
-              child: new Text("Answer 1"),
-              onPressed: answerPicked,
-            ),
-            new RaisedButton(
-              child: new Text("Answer 2"),
-              onPressed: answerPicked,
-            ),
-            new RaisedButton(
-              child: new Text("Answer 3"),
-              onPressed: answerPicked,
-            ),
+            new QuestionWidget(
+              questions[counter]["question"]),
+           ...(questions[counter]["answer"] as List<String>).map((answer){
+             return Answer(_answerPicked,answer);
+           }).toList(),
+            
           ],
         ),
       ),
