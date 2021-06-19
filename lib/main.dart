@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:module2/question.dart';
-import './answer.dart';
-
+import './quizRun.dart';
+import './Result.dart';
 void main() {
   runApp(new FirstApp());
 }
@@ -14,54 +13,70 @@ class FirstApp extends StatefulWidget {
 }
 
 class _FirstAppState extends State<FirstApp> {
+   final questions = const [
+      {
+        "question":"What is you favourite colour",
+      "answer":[
+       {"text":"blue","score":6},
+       {"text":"green","score":3},
+       {"text":"black","score":10},
+       {"text":"red","score":8}
+      ],
+      },
+      {
+        "question":"What is you favourite animal",
+      "answer":[
+        {"text":"lion","score":8},
+       {"text":"rabbit","score":1},
+       {"text":"whale","score":7},
+       {"text":"snakes","score":10},
+      ],
+      },
+      {
+        "question":"What is you favourite weather",
+      "answer":[
+        {"text":"humid","score":10},
+       {"text":"sunny","score":7},
+       {"text":"rainy","score":3},
+      ],},
+      {
+        "question":"What is you favourite programming lang",
+      "answer":[
+        {"text":"c++","score":1},
+       {"text":"java","score":1},
+       {"text":"python","score":1},
+       {"text":"dart","score":1},
+      ],},
+      
+    ];
   var counter = 0;
-  void _answerPicked() {
+  var totalScore=0;
+void _reset(){
+  setState((){
+      counter=0;
+  totalScore=0;
+  });
+}
+
+  void _answerPicked(int score) {
+    totalScore=totalScore+score;
     setState(() {
       counter++;
     });
+    if(counter<questions.length){
+      print("more questions available");
+    }else print("no more questions");
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        "question":"What is you favourite colour",
-      "answer":[
-       "blue","green","black","red"
-      ]},
-      {
-        "question":"What is you favourite animal",
-      "answer":[
-       "lion","tiger","whale"
-      ]},
-      {
-        "question":"What is you favourite weather",
-      "answer":[
-       "humid","sunny","rainy"
-      ]},
-      {
-        "question":"What is you favourite programming lang",
-      "answer":[
-       "c++","dart","java"
-      ]},
-      
-    ];
-    
     return MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
           title: new Text('First App'),
         ),
-        body: new Column(
-          children: <Widget>[
-            new QuestionWidget(
-              questions[counter]["question"]),
-           ...(questions[counter]["answer"] as List<String>).map((answer){
-             return Answer(_answerPicked,answer);
-           }).toList(),
-            
-          ],
-        ),
+        body:counter<questions.length? QuizRuns(questions,_answerPicked,counter)
+        :new ShowResult(totalScore,_reset),
       ),
     );
   }
